@@ -1,6 +1,10 @@
 import fastify from 'fastify'
+import { userRoutes } from './src/routes/userRoutes'
 
 const server = fastify()
+
+//routes
+server.register(userRoutes)
 
 server.get('/helloWorld', async (request, reply) => {
   return 'Hello world!\n'
