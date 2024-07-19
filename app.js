@@ -14,7 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const userRoutes_1 = require("./src/routes/userRoutes");
-const server = (0, fastify_1.default)();
+const ajv_compiler_1 = require("@fastify/ajv-compiler");
+const server = (0, fastify_1.default)({
+    logger: true,
+    ajv: {
+        customOptions: {
+            removeAdditional: 'all',
+            useDefaults: true,
+            coerceTypes: true,
+            allErrors: true,
+            strict: false,
+        },
+        plugins: [ajv_compiler_1.AjvCompiler],
+    },
+});
 //routes
 server.register(userRoutes_1.userRoutes);
 server.get('/helloWorld', (request, reply) => __awaiter(void 0, void 0, void 0, function* () {

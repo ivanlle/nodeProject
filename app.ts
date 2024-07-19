@@ -1,7 +1,20 @@
 import fastify from 'fastify'
 import { userRoutes } from './src/routes/userRoutes'
+import { AjvCompiler } from '@fastify/ajv-compiler';
 
-const server = fastify()
+const server = fastify({ 
+  logger: true,
+  ajv: {
+      customOptions: {
+          removeAdditional: 'all',
+          useDefaults: true,
+          coerceTypes: true,
+          allErrors: true,
+          strict: false,
+      },
+      plugins: [AjvCompiler],
+  },
+});
 
 //routes
 server.register(userRoutes)

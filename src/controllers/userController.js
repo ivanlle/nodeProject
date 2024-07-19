@@ -34,10 +34,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUser = exports.updateUser = exports.getUsers = exports.getUser = exports.createUser = void 0;
 const userService = __importStar(require("../services/userService"));
+const dniPattern = /^\d{8}[A-Z]$/;
+const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+const namePattern = /^[A-Za-zÁÉÍÓÚÑáéíóúñ\s]+$/;
 const createUser = (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
     const data = request.body;
-    const user = yield userService.createUser(data);
-    reply.send(user);
+    //Validate data 
+    if (!dniPattern.test(data.dni)) {
+        reply.status(400).send({ message: 'Incorrect Dni make sure you meet the standard' });
+    }
+    else if (!emailPattern.test(data.email)) {
+        reply.status(400).send({ message: 'Incorrect email format' });
+    }
+    else if (!(typeof data.age === 'number')) {
+        reply.status(400).send({ message: 'Incorrect age format, you have to send a number.' });
+    }
+    else if (!namePattern.test(data.firstName)) {
+        reply.status(400).send({ message: 'Incorrect firstName, invalid character entered' });
+    }
+    else if (!namePattern.test(data.lastName)) {
+        reply.status(400).send({ message: 'Incorrect lastName, invalid character entered' });
+    }
+    else {
+        const user = yield userService.createUser(data);
+        reply.send(user);
+    }
 });
 exports.createUser = createUser;
 const getUser = (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
@@ -60,6 +81,36 @@ const updateUser = (request, reply) => __awaiter(void 0, void 0, void 0, functio
     const { id } = request.params;
     const data = request.body;
     try {
+        //Validate data 
+        if (!data.age && !data.dni && !data.email && !data.firstName && !data.lastName) {
+            return reply.status(400).send({ message: 'No data' });
+        }
+        if (data.dni) {
+            if (!dniPattern.test(data.dni)) {
+                reply.status(400).send({ message: 'Incorrect Dni make sure you meet the standard' });
+            }
+            ;
+        }
+        if (data.email) {
+            if (!emailPattern.test(data.email)) {
+                reply.status(400).send({ message: 'Incorrect email format' });
+            }
+        }
+        if (data.age) {
+            if (!(typeof (data.age) === 'number')) {
+                reply.status(400).send({ message: 'Incorrect age format, you have to send a number.' });
+            }
+        }
+        if (data.firstName) {
+            if (!namePattern.test(data.firstName)) {
+                reply.status(400).send({ message: 'Incorrect firstName, invalid character entered' });
+            }
+        }
+        if (data.lastName) {
+            if (!namePattern.test(data.lastName)) {
+                reply.status(400).send({ message: 'Incorrect lastName, invalid character entered' });
+            }
+        }
         const user = yield userService.updateUser(parseInt(id), data);
         reply.send(user);
     }
