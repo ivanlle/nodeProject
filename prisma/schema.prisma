@@ -18,8 +18,8 @@ model user {
   email String @unique
   firstName String
   lastName String
-  dni String
-  age Int 
+  dni String @unique @db.VarChar(9)
+  age Int   @db.Integer
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   posts post[]
@@ -27,9 +27,9 @@ model user {
 
 model post {
   id Int @id @default(autoincrement())
-  title String
+  title String @db.VarChar(255)
   content String
-  authorId Int
+  authorId Int @db.Integer
   author user @relation(fields: [authorId],references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
