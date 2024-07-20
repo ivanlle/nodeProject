@@ -22,4 +22,15 @@ model user {
   age Int 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  posts post[]
+}
+
+model post {
+  id Int @id @default(autoincrement())
+  title String
+  content String
+  authorId Int
+  author user @relation(fields: [authorId],references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

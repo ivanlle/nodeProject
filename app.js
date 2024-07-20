@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fastify_1 = __importDefault(require("fastify"));
 const userRoutes_1 = require("./src/routes/userRoutes");
 const ajv_compiler_1 = require("@fastify/ajv-compiler");
+const postRoutes_1 = require("./src/routes/postRoutes");
 const server = (0, fastify_1.default)({
     logger: true,
     ajv: {
@@ -30,6 +31,7 @@ const server = (0, fastify_1.default)({
 });
 //routes
 server.register(userRoutes_1.userRoutes);
+server.register(postRoutes_1.postRoutes);
 server.get('/helloWorld', (request, reply) => __awaiter(void 0, void 0, void 0, function* () {
     return 'Hello world!\n';
 }));

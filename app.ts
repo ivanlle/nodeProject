@@ -1,6 +1,7 @@
 import fastify from 'fastify'
 import { userRoutes } from './src/routes/userRoutes'
 import { AjvCompiler } from '@fastify/ajv-compiler';
+import { postRoutes } from './src/routes/postRoutes';
 
 const server = fastify({ 
   logger: true,
@@ -18,6 +19,7 @@ const server = fastify({
 
 //routes
 server.register(userRoutes)
+server.register(postRoutes)
 
 server.get('/helloWorld', async (request, reply) => {
   return 'Hello world!\n'
